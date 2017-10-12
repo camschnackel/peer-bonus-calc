@@ -1,39 +1,25 @@
 var express = require('express');
 var path = require('path');
-require('dotenv').config();
 var app = express();
 var port = process.env.PORT || 5000;
 
-app.use(express.static('server/public'));
+var Employee = require('./public/modules/employee.module.js');
+var Company = require('./public/modules/company.module.js');
 
-// Using requst module to make HTTP requests from the server
-// https://www.npmjs.com/package/request
-var request = require('request');
+var thePerson = new Employee('Bill', '2017, 01, 12', 65000, 4);
+thePerson.tenure();
+console.log(thePerson);
 
-// API Key & username are environment variables in Heroku
-// var token = process.env.TOKEN_NAME;
+var theCompany = new Company('Ethan INC');
+theCompany.addEmployee(thePerson);
+console.log('theCompany', theCompany);
+
+theCompany.employeeBonus(thePerson.rating, thePerson.tenure, thePerson.salary);
+
+console.log('theBonus ->', theCompany.bonus);
+
 
 app.use(express.static('public'));
-
-// passport stuff
-// var user_options = {
-//     url: 'https://api.github.com/users/' + username,
-//     headers: {
-//         'User-Agent': 'request',
-//         'Authorization': 'token ' + oauthToken
-//     }
-// };
-
-// Moved API call into server to protect oAuthToken
-// app.get('/github/user', function (req, res) {
-//     request(user_options, function (error, response, body) {
-//         if (response && response.statusCode == 200) {
-//             res.send(body);
-//         } else {
-//             res.sendStatus(500);
-//         }
-//     });
-// });
 
 app.listen(port, function () {
     console.log('localhost running on port', port);
